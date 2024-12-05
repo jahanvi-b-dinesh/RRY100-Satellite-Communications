@@ -1,0 +1,64 @@
+clc;
+clear all;
+
+RE = 6378; 
+r = 42162.9;
+
+
+l = deg2rad(57.395768);
+L1 = deg2rad(48); %SAT1
+L2 = deg2rad(40); %B-SAT1
+L3 = deg2rad(10); %SAT2
+L4 = deg2rad(2); %B-SAT2
+
+delta_theta_1 = L1 - L2;
+delta_theta_2 = L2 - L3;
+delta_theta_3 = L3 - L4;
+
+% Calculate angular separation phi
+cos_phi_1 = cos(l) * cos(L1);
+phi_1 = acos(cos_phi_1); % phi in radians
+
+cos_phi_2 = cos(l) * cos(L2);
+phi_2 = acos(cos_phi_2); % phi in radians
+
+cos_phi_3 = cos(l) * cos(L3);
+phi_3 = acos(cos_phi_3); % phi in radians
+
+cos_phi_4 = cos(l) * cos(L4);
+phi_4 = acos(cos_phi_4); % phi in radians
+
+% Calculate elevation angle E
+% numerator = cos_phi - RE / r;
+% denominator = sqrt(1 - cos_phi^2);
+% E = atan(numerator / denominator); % Elevation angle in radians
+
+% Convert angles from radians to degrees for easier interpretation
+phi_deg_1 = rad2deg(phi_1);
+phi_deg_2 = rad2deg(phi_2);
+phi_deg_3 = rad2deg(phi_3);
+phi_deg_4 = rad2deg(phi_4);
+
+
+% E_deg = rad2deg(E);
+
+
+%Distance from ground station to satellite
+
+R1 = sqrt(RE^2 + r^2 - 2*RE*r*cosd(phi_deg_1));
+R2 = sqrt(RE^2 + r^2 - 2*RE*r*cosd(phi_deg_2));
+R3 = sqrt(RE^2 + r^2 - 2*RE*r*cosd(phi_deg_3));
+R4 = sqrt(RE^2 + r^2 - 2*RE*r*cosd(phi_deg_4));
+fprintf('Distance between ground station and Sat-1: %.2f kms\n', R1);
+fprintf('Distance between ground station and Sat-2: %.2f kms\n', R2);
+fprintf('Distance between ground station and B-Sat1: %.2f kms\n', R3);
+fprintf('Distance between ground station and B-Sat2: %.2f kms\n', R4);
+
+
+% Distance between satellites 
+R12 = r * delta_theta_1;
+R23 = r * delta_theta_2;
+R34 = r * delta_theta_3;
+fprintf('Distance between Sat-1 and B-Sat1: %.2f kms\n', R12);
+fprintf('Distance between B-sat1 and Sat-2: %.2f kms\n', R23);
+fprintf('Distance between Sat-2 and B-Sat2: %.2f kms\n', R34);
